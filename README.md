@@ -14,6 +14,11 @@ kubectl -n redis port-forward redis-0 6379:6379
 ```
 
 ### App
+Activate virtual environment(Optional)
+```
+python3 -m venv key_store
+source key_store/bin/activate
+```
 Install python requirements
 ```
 pip install -r requirements.txt
