@@ -12,3 +12,9 @@ For port-forwarding use the following
 ```
 kubectl -n redis port-forward redis-0 6379:6379
 ```
+
+### App
+Install python requirements
+```
+pip install -r requirements.txt
+```
