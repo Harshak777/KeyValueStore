@@ -6,3 +6,9 @@ Develop a key-value store using Kubernetes (k8s), FastAPI, and Huey as a REDIS q
 
 ### Creating the redis cluster
 Kubernetes deployment details [link](https://github.com/Harshak777/kubernetes-redis)
+
+Note:
+For port-forwarding use the following
+```
+kubectl -n redis port-forward redis-0 6379:6379
+```
