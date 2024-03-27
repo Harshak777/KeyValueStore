@@ -31,3 +31,9 @@ Start huey consumer
 ```
 python3 huey_consumer.py services.huey
 ```
+Optional step
+Build and push the Docker image
+```
+docker build . -t kharshak777/key-value-server
+docker push kharshak777/key-value-server
+```
