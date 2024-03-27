@@ -1,0 +1,55 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: kvserver-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: kvserver-deployment
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 25
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kvserver-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kvserver
+  template:
+    metadata:
+      labels:
+        app: kvserver
+    spec:
+      containers:
+      - name: kvserver-app
+        image: kharshak777/key-value-server
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kvserver-service
+spec:
+  clusterIP: None
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      name: kvserver
+  selector:
+    app: kvserver
