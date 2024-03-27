@@ -23,3 +23,7 @@ Install python requirements
 ```
 pip install -r requirements.txt
 ```
+Run FastAPI using uvicorn(ASGI server for python)
+```
+uvicorn main:app --reload
+```
