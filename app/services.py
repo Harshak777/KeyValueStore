@@ -1,8 +1,8 @@
 from huey import RedisHuey
 from redis import Redis
 
-huey = RedisHuey("queue", host="localhost")
-r = Redis(host="localhost", port=6379)
+huey = RedisHuey("queue", host="localhost", password="a-very-complex-password-here")
+r = Redis(host="localhost", port=6379 , password="a-very-complex-password-here")
 
 class Services:
     def __init__(self, host="localhost"):
