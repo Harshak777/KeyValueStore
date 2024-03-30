@@ -38,6 +38,11 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
+        env:
+        - name: QUEUE_NAME
+          value: "queue"
+        - name: HOST
+          value: "redis-cluster-service.keyvaluestore"
 
 ---
 apiVersion: v1
