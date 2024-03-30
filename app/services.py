@@ -1,8 +1,14 @@
 from huey import RedisHuey
 from redis import Redis
+import os
 
-huey = RedisHuey("queue", host="localhost", password="a-very-complex-password-here")
-r = Redis(host="localhost", port=6379 , password="a-very-complex-password-here")
+QUEUE_NAME = os.getenv("QUEUE_NAME", "queue")
+HOST = os.getenv("HOST", "localhost")
+PORT = os.getenv("PORT", 6379)
+
+
+huey = RedisHuey(QUEUE_NAME, host=HOST, port=PORT)
+r = Redis(host=HOST, port=PORT)
 
 class Services:
     def __init__(self, host="localhost"):
