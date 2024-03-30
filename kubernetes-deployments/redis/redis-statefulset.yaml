@@ -9,6 +9,7 @@ data:
     appendonly yes
     appendfilename "appendonly.aof"
     dir /data
+    
 ---
 
 apiVersion: autoscaling/v2
@@ -59,9 +60,9 @@ spec:
               fieldPath: status.podIP
         ports:
         - containerPort: 6379
-          name: client
+          name: redis-client
         - containerPort: 16379
-          name: gossip
+          name: cluster-gossip
         volumeMounts:
         - name: conf
           mountPath: /conf
@@ -80,3 +81,23 @@ spec:
       resources:
         requests:
           storage: 1Gi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-cluster-service
+spec:
+  clusterIP: None
+  selector:
+    app: redis-cluster
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+      name: redis-client
+    - protocol: TCP
+      port: 16379
+      targetPort: 16379
+      name: cluster-gossip
