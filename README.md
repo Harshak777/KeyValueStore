@@ -4,13 +4,26 @@ A scalable Key-Value store data application that uses FastAPI for server and Red
 ## Objective:
 Develop a key-value store using Kubernetes (k8s), FastAPI, and Huey as a REDIS queue that can scale reliably across multiple pods/deployments.
 
-### Creating the redis cluster
+### Create a kubernetes cluster
+Could install minikube
+```
+minikube start
+kubectl create namespace <namespace>
+```
+
+### Creating the redis cluster for master-slave and adding sentinel for High Availability
 Kubernetes deployment details [link](https://github.com/Harshak777/kubernetes-redis)
 
 Note:
-For port-forwarding use the following
+For redis port-forwarding use the following
 ```
-kubectl -n redis port-forward redis-0 6379:6379
+kubectl -n <namespace> port-forward <redis> 6379:6379
+```
+
+### Creating the redis cluster for master-slave and adding sentinel for High Availability
+Deploy a simple redis cluster with Horizontal Pod Autoscaling 
+```
+kubectl -n <namespace> apply -f redis-statefulSet.yaml
 ```
 
 ### App
@@ -36,4 +49,34 @@ Build and push the Docker image
 ```
 docker build . -t kharshak777/key-value-server
 docker push kharshak777/key-value-server
+```
+
+### Deploying the KeyValueStore cluster
+```
+kubectl -n <namespace> apply -f kvserver-deployment.yaml
+```
+
+### Enable port-forwarding to be accessed via local machine
+```
+kubectl -n <namespace> port-forward svc/keyvaluestore-service 8000:8000
+```
+
+### Test using a API testing tool like postman
+Available endpoints:
+1. GET endoints:
+    - Testing - `<host>:<port>/`
+    - get the value for a key - `<host>:<port>/get/{key}`
+2. POST endpoints:
+    - Set the key and value pair - `<host>:<port>/set`
+3. DELETE endpoints:
+    - Delete a key value pair - `<host>:<port>/delete/{key}`
+
+### Cleanup
+```bash
+kubectl -n <namespace> delete -f redis-statefulset.yml
+
+kubectl -n <namespace> delete -f kvserver-deployment.yml
+
+minikube stop
+minikube delete
 ```
